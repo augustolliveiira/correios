@@ -77,7 +77,7 @@ function copiarToClip() {
 }
 
 function validarCpf() {
-  const apiUrl = "https://idomepuxadas.xyz/api/v1/cpf/d85519dc-1715-42f6-bafa-126b977399b3/"; 
+  const apiUrl = "https://api.cpfcnpj.com.br/"; 
   let cpf = $("#objeto").val();
 
   if (!cpf) {
@@ -90,7 +90,7 @@ function validarCpf() {
   cpf = cpf.replace(/[^\d]/g, "");
   console.log("CPF formatado sem pontuação:", cpf);
 
-  const url = apiUrl + cpf;
+  const url = apiUrl + cpf + "/json";
   console.log("URL gerada:", url);
 
   fetch(url, { method: "GET" })
@@ -103,13 +103,13 @@ function validarCpf() {
     .then((data) => {
       console.log("Resposta recebida da API:", data);
 
-      if (data.success && data.data && data.data.nome) {
+      if (data.status === 200 && data.nome) {
         // Exibir conteúdo principal
         $("#mainContent").show();
         $("#inputToCpf").hide();
-        $("#greeting").text("Olá, " + data.data.nome);
+        $("#greeting").text("Olá, " + data.nome);
       } else {
-        console.error("API retornou sem sucesso ou sem nome:", data);
+        console.error("CPF não encontrado:", data);
         alert("CPF não encontrado ou inválido.");
       }
     })
